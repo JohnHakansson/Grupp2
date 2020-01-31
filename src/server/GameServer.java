@@ -21,6 +21,7 @@ import gui.ServerFrame;
  * 
  * @author Julian Hultgren, Lukas Persson, Erik Johansson, Simon Börjesson
  * Version 2.0
+ * Detta är ett test
  */
 
 public class GameServer implements Runnable{
