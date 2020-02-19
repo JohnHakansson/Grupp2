@@ -3,19 +3,15 @@ package server;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.logging.Logger;
 
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.text.AbstractDocument.BranchElement;
-
-import client.Tile;
 import gui.ServerFrame;
+import gui.ServerLogger;
 
 /**
  * 
@@ -33,6 +29,7 @@ public class GameServer implements Runnable{
 	private HashMap<String, client.Character> characterMap = new HashMap<String, client.Character>();
 	private Random rad = new Random();
 	private ServerFrame ui;
+	private ServerLogger logger = new ServerLogger();
 	
 	private boolean svulloAvailable = true;
 	private boolean tjoPangAvailable = true;
@@ -69,14 +66,19 @@ public class GameServer implements Runnable{
 	public void run() {
 		System.out.println("Server running...");
 		System.out.println("Server: Listening for clients...");
+		logger.log("Server running...");
+		logger.log("Server: Listening for clients...");
+
 		while(true){
 			try{
 				Socket socket = serverSocket.accept();
 				if (clientMap.size() <= 6){
 					System.out.println("Server: Client connected from..." +socket.getRemoteSocketAddress());
+					logger.log("Server: Client connected from..." + socket.getRemoteSocketAddress());
 					new ClientHandler(socket).start();
 				}else{
 					System.out.println("Server: Client can't connected from..." +socket.getRemoteSocketAddress() + " due to game being full");
+					logger.log("Server: Client can't connect from..." + socket.getRemoteSocketAddress() + " due to game being full");
 				}
 			}catch(IOException e){
 				e.printStackTrace();
@@ -90,6 +92,7 @@ public class GameServer implements Runnable{
 	
 	public void startGame(){
 		System.out.println("Server: starta spelet på servern "+id);
+		logger.log("Server: starta spelet på servern " + id);
 		for(int i = 1; i < id; i++){
 			clientMap.get(clientMapid.get(i)).createCharacter(clientMapid.get(i));
 			clientMap.get(clientMapid.get(i)).startCountdown();
@@ -143,8 +146,6 @@ public class GameServer implements Runnable{
 							cd.suspend();
 							clientsTurn(true);
 						}else if(sInput.equals("set character")){
-							
-							
 							character = (String)input.readObject();
 							
 							if(character.equals("Svullo")){
@@ -174,10 +175,8 @@ public class GameServer implements Runnable{
 								ch.output.writeBoolean(hannibalAvailable);
 								ch.output.writeBoolean(hookAvailable);
 								ch.output.flush();
-								
 							}
-							
-							
+
 						}else if(sInput.equals("show treasure")){
 							int player;
 							if(counter == 1){
@@ -218,6 +217,7 @@ public class GameServer implements Runnable{
 						}else {
 						
 							System.out.println("Server: Mottagit username");
+							logger.log("Server: Mottagit användarnamn");
 							clientMap.put(sInput, this);
 							clientMapid.put(id, sInput);
 							this.username = sInput;
@@ -231,7 +231,7 @@ public class GameServer implements Runnable{
 								for (int i = 1; i < clientMapid.size() + 1; i++) {
 							
 									System.out.println("Server: uppdaterar connectedUsers med: " + clientMapid.get(i));
-									
+									logger.log("Server: uppdaterar uppkopplade användare med: " + clientMapid.get(i));
 									ch.output.writeObject(clientMapid.get(i));
 									
 								}
@@ -326,6 +326,7 @@ public class GameServer implements Runnable{
 		
 		public void timeout(){
 			System.out.println("Srever: Time out");
+			logger.log("Server time-out");
 			try {
 				output.writeObject("time out");
 				output.flush();
@@ -448,6 +449,7 @@ public class GameServer implements Runnable{
 				}
 			}
 			System.out.println("Server: Karaktär skapad namn: " + name + " Row: " + myCharacter.getRow() + " Col: " + myCharacter.getCol());
+			logger.log("Karaktär skapad vid namn: " + name);
 			characterMap.put(name, myCharacter);
 			myCharacter.setCharacter(character);
 			updateCharPos(myCharacter);

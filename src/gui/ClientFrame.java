@@ -14,20 +14,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 
 import client.GameClient;
 
@@ -53,7 +42,8 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	private JPanel inputMiddlePanel = new JPanel(new GridBagLayout());
 	private JPanel charChoices = new JPanel();
 	private JPanel targetChoices = new JPanel();
-	
+	private JPanel connectHowToPlay = new JPanel(new GridLayout(1,2));
+
 	private JLayeredPane mapPane = new JLayeredPane();
 	private JLabel mapLabel = new JLabel();
 	
@@ -103,6 +93,7 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	private JLabel hookTargetBtn = new JLabel(new ImageIcon("images/Hook.png"));
 	
 	private JButton chooseChar = new JButton("Connect");
+	private JButton howToPlay = new JButton("How to play");
 	private JButton shootTarget = new JButton("shoot");
 
 	private DefaultListModel model = new DefaultListModel();
@@ -342,12 +333,13 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 		
 		chooseCharFrame.pack();
 		chooseTarget.pack();
+
 	}
-	
+
 	/**
 	 * Displays the name of the winner
 	 * 
-	 * @param	String	winner
+	 * @param	winner
 	 */
 	
 	public void showVictory(String winner){
@@ -366,8 +358,8 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	/**
 	 * Change out the icon of a character to its sleeping form or back to normal
 	 * 
-	 * @param	String	name
-	 * @param	boolean sleeping
+	 * @param		name
+	 * @param	 sleeping
 	 */
 	
 	public void setIconSleep(String name, boolean sleeping){
@@ -501,8 +493,8 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	/**
 	 * Method to enable buttons
 	 * 
-	 * @param enableButtons
-	 *            boolean
+	 * @param
+	 *
 	 */
 	public void updateViewer() {
 		enableButtons("update");

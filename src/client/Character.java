@@ -1,5 +1,6 @@
 package client;
 
+import javax.swing.*;
 import java.io.Serializable;
 
 /**
@@ -77,6 +78,7 @@ public class Character implements Serializable{
 	 */
 	
 	public void shot(){
+		JOptionPane.showMessageDialog(null,"You've been shot!");
 		sleeping = 4;
 	}
 	

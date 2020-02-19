@@ -162,6 +162,7 @@ public class GameClient implements Serializable{
 		System.out.println("Client: shootDice: " + roll);
 		
 		if(roll == 2 || roll == 6){
+
 			return true;
 		}
 		return false;
@@ -648,6 +649,7 @@ public class GameClient implements Serializable{
 		public void shootTarget(String target){
 			
 			characterMap.get(target).shot();
+			JOptionPane.showMessageDialog(null,"You've shot " + target);
 			try {
 				output.writeObject(characterMap.get(target));
 				output.flush();
