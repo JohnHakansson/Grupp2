@@ -112,7 +112,7 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	private JTextField username = new JTextField("");
 	private JTextArea character = new JTextArea("");
 
-	private JButton bConnect = new JButton("Choose caracter");
+	private JButton bConnect = new JButton("Choose character");
 	private JButton bDisconnect = new JButton("Disconnect");
 	private JButton bClose = new JButton("Close");
 
@@ -721,12 +721,8 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == bConnect) {
-			if (!username.getText().equals("")) {
-				client.setUsername(username.getText());
-				frame.setTitle(username.getText());
-				client.connect(serverIp.getText(), Integer.parseInt(serverPort.getText()));
-				bConnect.setEnabled(false);
-			}
+			chooseCharFrame.setVisible(true);
+			bConnect.setEnabled(false);
 		}
 		if (e.getSource() == bDisconnect) {
 			enableButtons("disconnect");
@@ -779,11 +775,18 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 			System.out.println("ClientFrame: Down");
 		}
 		if (e.getSource() == chooseChar){
-			
-			if(!character.getText().equals("")){
+
+			if (!username.getText().equals("")) {
+
+				String xUsername = username.getText();
+				client.setUsername(xUsername);
+				frame.setTitle(xUsername);
+				client.connect(serverIp.getText(), Integer.parseInt(serverPort.getText()));
+
 				client.setCharacter(character.getText());
 				chooseCharFrame.setVisible(false);
-			}	
+
+			}
 		}
 		if (e.getSource() == shootTarget) {
 			if (!target.equals("")) {

@@ -424,6 +424,16 @@ public class GameClient implements Serializable{
 		public Connection(String ipAddress, int port){
 			this.ipAddress = ipAddress;
 			this.port = port;
+
+			try{
+				socket = new Socket(ipAddress,port);
+				output = new ObjectOutputStream(socket.getOutputStream());
+				input = new ObjectInputStream(socket.getInputStream());
+				output.writeObject(username);
+				output.flush();
+			}catch (IOException e ){
+				e.printStackTrace();
+			}
 		}
 		
 		/**
@@ -440,15 +450,8 @@ public class GameClient implements Serializable{
 
 		public void run(){
 			System.out.println("Client Running");
-			try{
-				socket = new Socket(ipAddress,port);	
-				output = new ObjectOutputStream(socket.getOutputStream());
-				input = new ObjectInputStream(socket.getInputStream());
-				output.writeObject(username);
-				output.flush();
-			}catch (IOException e ){
-				e.printStackTrace();
-			}
+
+
 				
 			while(!Thread.interrupted()){
 				try{
