@@ -15,10 +15,9 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.*;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
 
 import client.GameClient;
+import server.ClientDisconnectMessage;
 
 
 /**
@@ -28,7 +27,7 @@ import client.GameClient;
  *
  */
 
-public class ClientFrame extends JPanel implements ActionListener, ViewerListener,KeyListener, MouseListener {
+public class ClientFrame extends JPanel implements ActionListener, ViewerListener, KeyListener, MouseListener {
 
 	private JPanel panel = new JPanel();
 	private JPanel leftPanel = new JPanel(new BorderLayout());
@@ -139,7 +138,7 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	/**
 	 * Constructor that sets up the visual for the client
 	 * 
-	 * @param 	GameClient	client
+	 * @param client
 	 */
 
 	public ClientFrame(GameClient client) {
@@ -478,6 +477,45 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	
 	public void addConnectedUser(String name){
 		model.addElement(name);
+	}
+
+	public void removeConnectedUser(ClientDisconnectMessage cdm) {
+		model.removeElement(cdm.getUsername());
+
+		removeCharacterFromMap(cdm.getCharacter().getName());
+	}
+
+	public void removeCharacterFromMap(String name) {
+
+		switch (name) {
+			case "Svullo":
+				mapPane.remove(svullo);
+				mapPane.repaint();
+				break;
+			case "TjoPang":
+				mapPane.remove(tjoPang);
+				mapPane.repaint();
+				break;
+			case "TheRat":
+				mapPane.remove(theRat);
+				mapPane.repaint();
+				break;
+			case "Hannibal":
+				mapPane.remove(hannibal);
+				mapPane.repaint();
+				break;
+			case "Markisen":
+				mapPane.remove(markisen);
+				mapPane.repaint();
+				break;
+			case "Hook":
+				mapPane.remove(hook);
+				mapPane.repaint();
+				break;
+			default:
+				break;
+		}
+
 	}
 	
 	/**

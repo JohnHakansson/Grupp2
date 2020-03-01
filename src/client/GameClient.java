@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
 
 import gui.ExtendedJLabel;
 import gui.ViewerListener;
+import server.AllMapPiecesMessage;
+import server.ClientDisconnectMessage;
 import server.GameServer;
 
 /**
@@ -54,13 +56,12 @@ public class GameClient implements Serializable{
 	public GameClient(){
 		System.out.println("Klient Startad");
 		map = createMap();
-		connection = new Connection();
 	}
 	
 	/**
 	 * Sets the username
 	 * 
-	 * @param 	String	username
+	 * @param username
 	 */
 	
 	public void setUsername(String username) {
@@ -70,7 +71,7 @@ public class GameClient implements Serializable{
 	/**
 	 * Sets the character name
 	 * 
-	 * @param 	String	character
+	 * @param character
 	 */
 	
 	public void setCharacter(String character){
@@ -91,18 +92,19 @@ public class GameClient implements Serializable{
 	/**
 	 * Creates a new class "Connection" with will connect to the server
 	 * 
-	 * @param	String	serverIp
-	 * @param	int		port
+	 * @param serverIp
+	 * @param port
 	 */
 	
 	public void connect(String serverIp, int port){
-		new Connection(serverIp,port).start();
+		connection = new Connection(serverIp,port);
+		connection.start();
 	}
 	
 	/**
 	 * Adds a listener to the listener list
 	 * 
-	 * @param	ViewerListener	listener
+	 * @param listener
 	 */
 	
 	public void addListeners(ViewerListener listener) {
@@ -188,6 +190,12 @@ public class GameClient implements Serializable{
 	*/
 	public void disconnect() {
 		try {
+
+			ClientDisconnectMessage cdm = new ClientDisconnectMessage(characterMap.get(username), username);
+
+			output.writeObject(cdm);
+			output.flush();
+
 			socket.close();
 			output.close();
 			input.close();
@@ -357,7 +365,7 @@ public class GameClient implements Serializable{
 	/**
 	 * Method that attempts to shoot the given target
 	 * 
-	 * @param	String	character
+	 * @param character
 	 */
 	
 	public void shoot(String character){
@@ -378,8 +386,8 @@ public class GameClient implements Serializable{
 	/**
 	 *  Intermediator between you and "moveChar" that will try to move the character the specified way
 	 *  
-	 * @param 	String	username
-	 * @param	String	direction
+	 * @param 	username
+	 * @param 	direction
 	 */
 	
 	public void moveCharacter( String username, String direction){
@@ -409,8 +417,8 @@ public class GameClient implements Serializable{
 		
 		/**
 		 * Constructor 
-		 * @param 	String	ipAddress
-		 * @param 	int		port
+		 * @param ipAddress
+		 * @param port
 		 */
 		
 		public Connection(String ipAddress, int port){
@@ -602,10 +610,19 @@ public class GameClient implements Serializable{
 						}
 					}
 
+					else if(object instanceof ClientDisconnectMessage) {
+
+						ClientDisconnectMessage cdm = (ClientDisconnectMessage)object;
+
+						for(ViewerListener listener : listeners) {
+							listener.removeConnectedUser(cdm);
+						}
+
+					}
+
 				}catch (IOException | ClassNotFoundException e){
-					disconnect();
 					e.printStackTrace();
-					Thread.currentThread().stop();					
+					Thread.currentThread().interrupt();
 				}
 			}
 		}
@@ -627,7 +644,7 @@ public class GameClient implements Serializable{
 		/**
 		 * Sends the username to the server
 		 * 
-		 * @param 	String	character
+		 * @param character
 		 */
 		
 		public void setCharacter(String character){
@@ -643,7 +660,7 @@ public class GameClient implements Serializable{
 		/**
 		 * Sends the character how got shot to the server 
 		 * 
-		 * @param 	String	target
+		 * @param target
 		 */
 		
 		public void shootTarget(String target){
@@ -661,7 +678,7 @@ public class GameClient implements Serializable{
 		/**
 		 * Sends a character to the server
 		 * 
-		 * @param	Chartacter	character
+		 * @param character
 		 */
 		
 		public void flushCharacter(client.Character character){
@@ -676,8 +693,8 @@ public class GameClient implements Serializable{
 		/**
 		 * Checks the direction the character wants to move an if its a valid move tells the server 
 		 * 
-		 * @param	Character	character
-		 * @param 	String	direction
+		 * @param character
+		 * @param direction
 		 */
 		
 		public void moveChar(client.Character character, String direction) {
@@ -758,7 +775,7 @@ public class GameClient implements Serializable{
 		/**
 		 * Tells the server to show the treasure
 		 * 
-		 * @param	boolean	status
+		 * @param status
 		 */
 		
 		public void showTreasure(boolean status){
@@ -776,7 +793,7 @@ public class GameClient implements Serializable{
 		/**
 		 * Tells "clientFrame" what it should change and reads data that has been modified 
 		 * 
-		 * @param	Character	character
+		 * @param character
 		 */
 
 		public void updateCharacter(client.Character character){
@@ -853,12 +870,12 @@ public class GameClient implements Serializable{
 			}
 		}	
 	}
-	
+
 	/**
-	 * Checks the tiles to the specified side of your character for available path 
-	 * 
-	 * @param 	String dir
-	 * @return	boolean
+	 *
+	 * @param me
+	 * @param dir
+	 * @return ret
 	 */
 
 	public boolean checkMove(client.Character me, String dir) {
@@ -926,7 +943,7 @@ public class GameClient implements Serializable{
 
 	/**
 	 * Creates a map 
-	 * @return	Tile[][]	map array
+	 * @return map array
 	 */
 	
 	public Tile[][] createMap(){
@@ -1172,7 +1189,7 @@ public class GameClient implements Serializable{
 	/**
 	 * Returns a ArrayList with the characters in view
 	 * 
-	 * @param Character
+	 * @param character
 	 * @return ArrayList<client.Character>
 	 */
 	
@@ -1277,5 +1294,11 @@ public class GameClient implements Serializable{
 		}else{
 			return charArray;
 		}
-	}		
+	}
+
+	public void sendMessageAllMapPieces() {
+		AllMapPiecesMessage ampm = new AllMapPiecesMessage(character , username);
+
+
+	}
 }

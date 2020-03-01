@@ -45,8 +45,8 @@ public class GameServer implements Runnable{
 	/**
 	 * Constructor starts up the server
 	 * 
-	 * @param 	int			port
-	 * @param	ServerFrame	ui
+	 * @param 	port
+	 * @param	ui
 	 */
 	
 	public GameServer(int port, ServerFrame ui){
@@ -119,7 +119,7 @@ public class GameServer implements Runnable{
 		/**
 		 * Constructor starts up a output stream and a input stream
 		 * 
-		 * @param	Soket	socket
+		 * @param socket
 		 */
 		
 		public ClientHandler(Socket socket) {
@@ -218,9 +218,9 @@ public class GameServer implements Runnable{
 						
 							System.out.println("Server: Mottagit username");
 							logger.log("Server: Mottagit användarnamn");
-							clientMap.put(sInput, this);
+							username = sInput;
+							clientMap.put(username, this);
 							clientMapid.put(id, sInput);
-							this.username = sInput;
 							playerid = id;
 							id++;
 							ui.addUser(sInput);
@@ -252,14 +252,29 @@ public class GameServer implements Runnable{
 						}
 
 					}
-					if(object instanceof client.Character) {
+
+					else if(object instanceof client.Character) {
 						client.Character character = (client.Character) object;
 						updateCharPos(character);
+					}
+
+					else if(object instanceof ClientDisconnectMessage) {
+
+						ClientDisconnectMessage cdm = (ClientDisconnectMessage)object;
+
+						for(String s : clientMap.keySet()) {
+
+							if(s.equals(cdm.getUsername())) {
+								continue;
+							}
+
+							clientMap.get(s).output.writeObject(cdm);
+						}
 					}
 					
 				}catch (IOException | ClassNotFoundException e) {
 					closeSocket();
-					Thread.currentThread().stop();
+					Thread.currentThread().interrupt();
 					e.printStackTrace();
 				}
 			}
@@ -285,7 +300,7 @@ public class GameServer implements Runnable{
 			/**
 			 * Constructor
 			 * 
-			 * @param	ClientHandler	ch
+			 * @param ch
 			 */
 			
 			public CountDown(ClientHandler ch){
@@ -340,7 +355,7 @@ public class GameServer implements Runnable{
 		 * goes through the number of players and when it reaches
 		 * the number of players it goes back down to 1
 		 * 
-		 * @param	boolean		enableButton
+		 * @param enableButtons
 		 */
 		
 		public void clientsTurn(boolean enableButtons){
@@ -405,7 +420,7 @@ public class GameServer implements Runnable{
 		/**
 		 * Creates a character and places it on a empty starting position
 		 * 
-		 * @param	String	name
+		 * @param name
 		 */
 
 		public synchronized void createCharacter(String name) {
@@ -487,7 +502,7 @@ public class GameServer implements Runnable{
 		/**
 		 * Send out a character that has been change to all clients
 		 * 
-		 * @param	Character	charr
+		 * @param charr
 		 */
 		
 		public void updateCharPos(client.Character charr) {
@@ -513,9 +528,9 @@ public class GameServer implements Runnable{
 			try {
 				socket.close();
 				input.close();
-				characterMap.remove(sInput);
+				characterMap.remove(username);
 				clientMapid.remove(playerid);
-				clientMap.remove(sInput);
+				clientMap.remove(username);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
