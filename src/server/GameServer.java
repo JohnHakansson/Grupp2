@@ -269,12 +269,28 @@ public class GameServer implements Runnable{
 							}
 
 							clientMap.get(s).output.writeObject(cdm);
+							clientMap.get(s).output.flush();
+						}
+					}
+
+					else if(object instanceof AllMapPiecesMessage) {
+
+						AllMapPiecesMessage ampm = (AllMapPiecesMessage)object;
+
+						for(String s : clientMap.keySet()) {
+
+							if(s.equals(ampm.getUsername())) {
+								continue;
+							}
+
+							clientMap.get(s).output.writeObject(ampm);
+							clientMap.get(s).output.flush();
 						}
 					}
 					
 				}catch (IOException | ClassNotFoundException e) {
-					closeSocket();
 					Thread.currentThread().interrupt();
+					closeSocket();
 					e.printStackTrace();
 				}
 			}

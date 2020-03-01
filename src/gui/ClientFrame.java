@@ -433,7 +433,7 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	/**
 	 * Change out the icon of a character to its drowning form
 	 * 
-	 * @param	String	name
+	 * @param name
 	 */
 	
 	public void setWaterIcon(String name){
@@ -472,7 +472,7 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	/**
 	 * Adds a name to the "connectedUsers" list
 	 * 
-	 * @param	String	name
+	 * @param name
 	 */
 	
 	public void addConnectedUser(String name){
@@ -517,12 +517,6 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 		}
 
 	}
-	
-	/**
-	 * Method to enable buttons
-	 * 
-	 * @param 	boolean		enableButtons
-	 */
 
 	public void updateViewer(ExtendedJLabel theLabel) {
 		theLabel.setBackground(Color.RED);
@@ -609,8 +603,8 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	/**
 	 * Marks which character you are able to target
 	 * 
-	 * @param	String	character
-	 * @param	Srring	username
+	 * @param character
+	 * @param username
 	 */
 	
 	public void setAvailableTarget(String character, String username){
@@ -659,7 +653,7 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	/**
 	 * Method to enable or disable specific buttons
 	 * 
-	 * @param 	String		buttons
+	 * @param buttons
 	 */
 	
 	public void enableButtons(String buttons) {
@@ -1065,12 +1059,12 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	/**
 	 * Sets which characters is available
 	 * 
-	 * @param	boolean	svullo
-	 * @param	boolean	tjoPang
-	 * @param	boolean	theRat
-	 * @param	boolean	markisen
-	 * @param	boolean	hannibal
-	 * @param	boolean	hook
+	 * @param svullo
+	 * @param tjoPang
+	 * @param theRat
+	 * @param markisen
+	 * @param hannibal
+	 * @param hook
 	 */
 
 	@Override

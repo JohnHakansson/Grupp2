@@ -43,7 +43,7 @@ public class GameClient implements Serializable{
 	private boolean clientTurn = true;
 	private boolean shotTakenThisTurn;
 	private Connection connection;
-	
+
 	private int steps;
 	private int oldColThis = 2;
 	private int oldRowThis = 2;
@@ -63,7 +63,7 @@ public class GameClient implements Serializable{
 	 * 
 	 * @param username
 	 */
-	
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
@@ -452,6 +452,7 @@ public class GameClient implements Serializable{
 				
 			while(!Thread.interrupted()){
 				try{
+
 					Object object = input.readObject();
 					if(object instanceof Integer){
 						int row = (int)object;
@@ -617,6 +618,14 @@ public class GameClient implements Serializable{
 						for(ViewerListener listener : listeners) {
 							listener.removeConnectedUser(cdm);
 						}
+
+					}
+
+					else if(object instanceof AllMapPiecesMessage) {
+
+						AllMapPiecesMessage ampm = (AllMapPiecesMessage)object;
+
+						JOptionPane.showMessageDialog(null, ampm.getUsername() + " now has all the map pieces");
 
 					}
 
@@ -851,6 +860,7 @@ public class GameClient implements Serializable{
 				characterMap.get(characterName).givePieces(tempMapPieces);
 				if(characterMap.get(characterName).getPieces() == characterMap.size()){
 					showTreasure(true);
+					sendMessageAllMapPieces();
 				}
 			}
 			
@@ -868,7 +878,19 @@ public class GameClient implements Serializable{
 					}
 				}
 			}
-		}	
+		}
+
+		public void sendMessageAllMapPieces() {
+			AllMapPiecesMessage ampm = new AllMapPiecesMessage(username);
+
+			try {
+				output.writeObject(ampm);
+				output.flush();
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -1296,9 +1318,4 @@ public class GameClient implements Serializable{
 		}
 	}
 
-	public void sendMessageAllMapPieces() {
-		AllMapPiecesMessage ampm = new AllMapPiecesMessage(character , username);
-
-
-	}
 }
