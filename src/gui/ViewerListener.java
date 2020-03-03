@@ -23,7 +23,7 @@ public interface ViewerListener {
 	public void removeConnectedUser(ClientDisconnectMessage cdm);
 	public void removeConnectedUsers();
 	public void moveIcon(String name, int row, int col, boolean visible);
-	public void chooseCharFrame(boolean visable);
+	public void chooseCharFrame();
 	public void updateChooseCharFrame(boolean svullo, boolean tjoPang, boolean theRat, boolean markisen, boolean hannibal, boolean hook);
 	public void setAvailableTarget(String character, String username);
 	public void getTarget();

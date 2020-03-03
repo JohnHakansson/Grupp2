@@ -721,8 +721,12 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == bConnect) {
-			chooseCharFrame(true);
-			bConnect.setEnabled(false);
+			if (!username.getText().equals("")) {
+				client.setUsername(username.getText());
+				frame.setTitle(username.getText());
+				client.connect(serverIp.getText(), Integer.parseInt(serverPort.getText()));
+				bConnect.setEnabled(false);
+			}
 		}
 		if (e.getSource() == bDisconnect) {
 			enableButtons("disconnect");
@@ -776,16 +780,9 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 		}
 		if (e.getSource() == chooseChar){
 
-			if (!username.getText().equals("")) {
-
-				String xUsername = username.getText();
-				client.setUsername(xUsername);
-				frame.setTitle(xUsername);
-				client.connect(serverIp.getText(), Integer.parseInt(serverPort.getText()));
+			if(!character.getText().equals("")){
 				client.setCharacter(character.getText());
-
-				chooseCharFrame(false);
-
+				chooseCharFrame.setVisible(false);
 			}
 		}
 		if (e.getSource() == shootTarget) {
@@ -1054,8 +1051,8 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	 */
 
 	@Override
-	public void chooseCharFrame(boolean visable) {
-		chooseCharFrame.setVisible(visable);
+	public void chooseCharFrame() {
+		chooseCharFrame.setVisible(true);
 
 	}
 	

@@ -578,7 +578,7 @@ public class GameClient implements Serializable{
 								hook = input.readBoolean();
 								
 								listener.updateChooseCharFrame(svullo, tjoPang, theRat, markisen, hannibal, hook);
-								listener.chooseCharFrame(true);
+								listener.chooseCharFrame();
 							}
 						}else if(object.equals("updateUserInfo")){
 							for(ViewerListener listener: listeners){
