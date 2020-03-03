@@ -8,10 +8,11 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.logging.Logger;
 
 import gui.ServerFrame;
 import gui.ServerLogger;
+import messages.AllMapPiecesMessage;
+import messages.ClientDisconnectMessage;
 
 /**
  * 

@@ -17,7 +17,7 @@ import java.awt.event.MouseListener;
 import javax.swing.*;
 
 import client.GameClient;
-import server.ClientDisconnectMessage;
+import messages.ClientDisconnectMessage;
 
 
 /**

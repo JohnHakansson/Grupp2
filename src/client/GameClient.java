@@ -12,14 +12,11 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
 
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import gui.ExtendedJLabel;
 import gui.ViewerListener;
-import server.AllMapPiecesMessage;
-import server.ClientDisconnectMessage;
-import server.GameServer;
+import messages.AllMapPiecesMessage;
+import messages.ClientDisconnectMessage;
 
 /**
  * 
