@@ -12,14 +12,11 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
 
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import gui.ExtendedJLabel;
 import gui.ViewerListener;
-import server.AllMapPiecesMessage;
-import server.ClientDisconnectMessage;
-import server.GameServer;
+import messages.AllMapPiecesMessage;
+import messages.ClientDisconnectMessage;
 
 /**
  * 
@@ -241,7 +238,7 @@ public class GameClient implements Serializable{
 			
 			if(characterMap.get(username).hasTreasure() && map[characterMap.get(username).getRow()][characterMap.get(username).getCol()].getBoat()){
 				connection.victory();
-				System.out.println("Client: " + username + " har vunnigt!");
+				System.out.println("Client: " + username + " har vunnit!");
 			}
 		} else {
 			inWater();
@@ -424,6 +421,16 @@ public class GameClient implements Serializable{
 		public Connection(String ipAddress, int port){
 			this.ipAddress = ipAddress;
 			this.port = port;
+
+			try{
+				socket = new Socket(ipAddress,port);
+				output = new ObjectOutputStream(socket.getOutputStream());
+				input = new ObjectInputStream(socket.getInputStream());
+				output.writeObject(username);
+				output.flush();
+			}catch (IOException e ){
+				e.printStackTrace();
+			}
 		}
 		
 		/**
@@ -440,15 +447,8 @@ public class GameClient implements Serializable{
 
 		public void run(){
 			System.out.println("Client Running");
-			try{
-				socket = new Socket(ipAddress,port);	
-				output = new ObjectOutputStream(socket.getOutputStream());
-				input = new ObjectInputStream(socket.getInputStream());
-				output.writeObject(username);
-				output.flush();
-			}catch (IOException e ){
-				e.printStackTrace();
-			}
+
+
 				
 			while(!Thread.interrupted()){
 				try{

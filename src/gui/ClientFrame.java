@@ -17,7 +17,7 @@ import java.awt.event.MouseListener;
 import javax.swing.*;
 
 import client.GameClient;
-import server.ClientDisconnectMessage;
+import messages.ClientDisconnectMessage;
 
 
 /**
@@ -112,7 +112,7 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	private JTextField username = new JTextField("");
 	private JTextArea character = new JTextArea("");
 
-	private JButton bConnect = new JButton("Choose caracter");
+	private JButton bConnect = new JButton("Choose character");
 	private JButton bDisconnect = new JButton("Disconnect");
 	private JButton bClose = new JButton("Close");
 
@@ -779,11 +779,11 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 			System.out.println("ClientFrame: Down");
 		}
 		if (e.getSource() == chooseChar){
-			
+
 			if(!character.getText().equals("")){
 				client.setCharacter(character.getText());
 				chooseCharFrame.setVisible(false);
-			}	
+			}
 		}
 		if (e.getSource() == shootTarget) {
 			if (!target.equals("")) {
@@ -1053,7 +1053,7 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	@Override
 	public void chooseCharFrame() {
 		chooseCharFrame.setVisible(true);
-		
+
 	}
 	
 	/**

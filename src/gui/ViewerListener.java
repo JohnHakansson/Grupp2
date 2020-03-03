@@ -1,9 +1,6 @@
 package gui;
 
-import server.ClientDisconnectMessage;
-
-import javax.swing.Icon;
-import javax.swing.JLabel;
+import messages.ClientDisconnectMessage;
 
 /**
  * 
