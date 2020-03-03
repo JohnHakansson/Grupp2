@@ -241,7 +241,7 @@ public class GameClient implements Serializable{
 			
 			if(characterMap.get(username).hasTreasure() && map[characterMap.get(username).getRow()][characterMap.get(username).getCol()].getBoat()){
 				connection.victory();
-				System.out.println("Client: " + username + " har vunnigt!");
+				System.out.println("Client: " + username + " har vunnit!");
 			}
 		} else {
 			inWater();
@@ -578,7 +578,7 @@ public class GameClient implements Serializable{
 								hook = input.readBoolean();
 								
 								listener.updateChooseCharFrame(svullo, tjoPang, theRat, markisen, hannibal, hook);
-								listener.chooseCharFrame();
+								listener.chooseCharFrame(true);
 							}
 						}else if(object.equals("updateUserInfo")){
 							for(ViewerListener listener: listeners){
