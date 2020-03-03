@@ -231,6 +231,7 @@ public class GameClient implements Serializable{
 				map[characterMap.get(username).getRow()][characterMap.get(username).getCol()].treasureOff();
 				characterMap.get(username).giveTreasure();
 				System.out.println("Client: " + username + " har tagit upp skatten");
+				//TODO skicka meddelande till alla att någon har skatten
 				for (ViewerListener listener : listeners) {
 					listener.setIconSleep("Treasure", false);
 				}

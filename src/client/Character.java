@@ -78,7 +78,7 @@ public class Character implements Serializable{
 	 */
 	
 	public void shot(){
-		JOptionPane.showMessageDialog(null,"You've been shot!");
+//		JOptionPane.showMessageDialog(null,"You've been shot!");
 		sleeping = 4;
 	}
 	
