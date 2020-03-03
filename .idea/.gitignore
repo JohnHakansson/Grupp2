@@ -3,4 +3,5 @@
 # Default ignored files
 
 dictionaries/Ginis.xml
+out/
 /workspace.xml
