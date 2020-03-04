@@ -13,4 +13,16 @@ public class CharacterTest {
         ch.passATurn();
         assertEquals(3, ch.sleeping());
     }
+
+    @Test
+    public void stealPieces() {
+        Character ch = new Character("Vik", 1,2);
+        ch.setPieces(2);
+        assertEquals(2, ch.getPieces());
+        ch.stealPieces();
+        assertEquals(0, ch.getPieces());
+
+    }
+
+
 }
