@@ -1,7 +1,6 @@
 package gui;
 
-import javax.swing.Icon;
-import javax.swing.JLabel;
+import messages.ClientDisconnectMessage;
 
 /**
  * 
@@ -18,6 +17,7 @@ public interface ViewerListener {
 	public void updateInfoRutaTreasure(String text);
 	public void enableButtons(String text);
 	public void addConnectedUser(String namn);
+	public void removeConnectedUser(ClientDisconnectMessage cdm);
 	public void removeConnectedUsers();
 	public void moveIcon(String name, int row, int col, boolean visible);
 	public void chooseCharFrame();

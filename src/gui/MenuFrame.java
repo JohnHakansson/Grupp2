@@ -7,15 +7,14 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
-import javax.swing.GroupLayout;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 
 import client.GameClient;
 
@@ -35,14 +34,16 @@ public class MenuFrame implements ActionListener{
 	private	JButton host = new JButton("Host");
 	private	JButton join = new JButton("Join");
 	private	JButton quit = new JButton("Quit");
+	private JButton btnHowToPlay = new JButton("How to play");
+
 	private GridBagLayout layout = new GridBagLayout();	
-	private	JPanel panel = new JPanel(new GridLayout(4,1,10,10));
+	private	JPanel panel = new JPanel(new GridLayout(5,1,10,10));
 	JFrame frame = new JFrame("Main Menu");
 	
 	/**
 	 * Constructor who receives an ImageIcon object.
 	 * The constructor also builds the menu box
-	 * @param	ImageIcon	icon
+	 * @param	icon
 	 */
 	
 	public MenuFrame(ImageIcon icon) {
@@ -54,6 +55,7 @@ public class MenuFrame implements ActionListener{
 		panel.add(host);
 		panel.add(join);
 		panel.add(quit);
+		panel.add(btnHowToPlay);
 	
 		iconPanel.add(panel,new GridBagConstraints());
 		iconPanel.setPreferredSize(new Dimension(800,600));
@@ -61,7 +63,8 @@ public class MenuFrame implements ActionListener{
 		host.addActionListener(this);
 		join.addActionListener(this);
 		quit.addActionListener(this);
-		
+		btnHowToPlay.addActionListener(this);
+
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(iconPanel);
 		frame.pack();
@@ -94,7 +97,52 @@ public class MenuFrame implements ActionListener{
 			System.out.println("Någon har klickat på 'Quit'"); //Kommentar för White box-testning - Julian Hultgren
 			System.exit(0);
 		}
-	}	
+		if(e.getSource() == btnHowToPlay){
+			showGameInfo();
+		}
+
+	}
+
+	public void showGameInfo(){
+
+		JPanel panelGameInfo = new JPanel();
+		panelGameInfo.setBorder(new TitledBorder(new EtchedBorder(), "Play instructions"));
+
+		JTextArea txtArea = new JTextArea(16, 120);
+		txtArea.setEditable(false);
+
+		JScrollPane scroll = new JScrollPane(txtArea);
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+		panelGameInfo.add(scroll);
+
+
+		JFrame frame = new JFrame("Game info");
+		frame.setResizable(false);
+		frame.add(panelGameInfo);
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+
+		File file = new File("files/test.txt");
+
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(file));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		try {
+			String st;
+			while ((st = br.readLine()) != null)
+				txtArea.append(st + "\n");
+		}catch(Exception e){
+			System.err.println(e);
+
+	}
+
+}
+
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {

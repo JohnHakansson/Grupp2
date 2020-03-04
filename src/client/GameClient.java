@@ -12,12 +12,11 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
 
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import gui.ExtendedJLabel;
 import gui.ViewerListener;
-import server.GameServer;
+import messages.AllMapPiecesMessage;
+import messages.ClientDisconnectMessage;
 
 /**
  * 
@@ -41,7 +40,7 @@ public class GameClient implements Serializable{
 	private boolean clientTurn = true;
 	private boolean shotTakenThisTurn;
 	private Connection connection;
-	
+
 	private int steps;
 	private int oldColThis = 2;
 	private int oldRowThis = 2;
@@ -54,15 +53,14 @@ public class GameClient implements Serializable{
 	public GameClient(){
 		System.out.println("Klient Startad");
 		map = createMap();
-		connection = new Connection();
 	}
 	
 	/**
 	 * Sets the username
 	 * 
-	 * @param 	String	username
+	 * @param username
 	 */
-	
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
@@ -70,7 +68,7 @@ public class GameClient implements Serializable{
 	/**
 	 * Sets the character name
 	 * 
-	 * @param 	String	character
+	 * @param character
 	 */
 	
 	public void setCharacter(String character){
@@ -91,18 +89,19 @@ public class GameClient implements Serializable{
 	/**
 	 * Creates a new class "Connection" with will connect to the server
 	 * 
-	 * @param	String	serverIp
-	 * @param	int		port
+	 * @param serverIp
+	 * @param port
 	 */
 	
 	public void connect(String serverIp, int port){
-		new Connection(serverIp,port).start();
+		connection = new Connection(serverIp,port);
+		connection.start();
 	}
 	
 	/**
 	 * Adds a listener to the listener list
 	 * 
-	 * @param	ViewerListener	listener
+	 * @param listener
 	 */
 	
 	public void addListeners(ViewerListener listener) {
@@ -162,6 +161,7 @@ public class GameClient implements Serializable{
 		System.out.println("Client: shootDice: " + roll);
 		
 		if(roll == 2 || roll == 6){
+
 			return true;
 		}
 		return false;
@@ -187,6 +187,12 @@ public class GameClient implements Serializable{
 	*/
 	public void disconnect() {
 		try {
+
+			ClientDisconnectMessage cdm = new ClientDisconnectMessage(characterMap.get(username), username);
+
+			output.writeObject(cdm);
+			output.flush();
+
 			socket.close();
 			output.close();
 			input.close();
@@ -232,7 +238,7 @@ public class GameClient implements Serializable{
 			
 			if(characterMap.get(username).hasTreasure() && map[characterMap.get(username).getRow()][characterMap.get(username).getCol()].getBoat()){
 				connection.victory();
-				System.out.println("Client: " + username + " har vunnigt!");
+				System.out.println("Client: " + username + " har vunnit!");
 			}
 		} else {
 			inWater();
@@ -356,7 +362,7 @@ public class GameClient implements Serializable{
 	/**
 	 * Method that attempts to shoot the given target
 	 * 
-	 * @param	String	character
+	 * @param character
 	 */
 	
 	public void shoot(String character){
@@ -377,8 +383,8 @@ public class GameClient implements Serializable{
 	/**
 	 *  Intermediator between you and "moveChar" that will try to move the character the specified way
 	 *  
-	 * @param 	String	username
-	 * @param	String	direction
+	 * @param 	username
+	 * @param 	direction
 	 */
 	
 	public void moveCharacter( String username, String direction){
@@ -408,13 +414,23 @@ public class GameClient implements Serializable{
 		
 		/**
 		 * Constructor 
-		 * @param 	String	ipAddress
-		 * @param 	int		port
+		 * @param ipAddress
+		 * @param port
 		 */
 		
 		public Connection(String ipAddress, int port){
 			this.ipAddress = ipAddress;
 			this.port = port;
+
+			try{
+				socket = new Socket(ipAddress,port);
+				output = new ObjectOutputStream(socket.getOutputStream());
+				input = new ObjectInputStream(socket.getInputStream());
+				output.writeObject(username);
+				output.flush();
+			}catch (IOException e ){
+				e.printStackTrace();
+			}
 		}
 		
 		/**
@@ -431,18 +447,12 @@ public class GameClient implements Serializable{
 
 		public void run(){
 			System.out.println("Client Running");
-			try{
-				socket = new Socket(ipAddress,port);	
-				output = new ObjectOutputStream(socket.getOutputStream());
-				input = new ObjectInputStream(socket.getInputStream());
-				output.writeObject(username);
-				output.flush();
-			}catch (IOException e ){
-				e.printStackTrace();
-			}
+
+
 				
 			while(!Thread.interrupted()){
 				try{
+
 					Object object = input.readObject();
 					if(object instanceof Integer){
 						int row = (int)object;
@@ -601,10 +611,27 @@ public class GameClient implements Serializable{
 						}
 					}
 
+					else if(object instanceof ClientDisconnectMessage) {
+
+						ClientDisconnectMessage cdm = (ClientDisconnectMessage)object;
+
+						for(ViewerListener listener : listeners) {
+							listener.removeConnectedUser(cdm);
+						}
+
+					}
+
+					else if(object instanceof AllMapPiecesMessage) {
+
+						AllMapPiecesMessage ampm = (AllMapPiecesMessage)object;
+
+						JOptionPane.showMessageDialog(null, ampm.getUsername() + " now has all the map pieces");
+
+					}
+
 				}catch (IOException | ClassNotFoundException e){
-					disconnect();
 					e.printStackTrace();
-					Thread.currentThread().stop();					
+					Thread.currentThread().interrupt();
 				}
 			}
 		}
@@ -626,7 +653,7 @@ public class GameClient implements Serializable{
 		/**
 		 * Sends the username to the server
 		 * 
-		 * @param 	String	character
+		 * @param character
 		 */
 		
 		public void setCharacter(String character){
@@ -642,12 +669,13 @@ public class GameClient implements Serializable{
 		/**
 		 * Sends the character how got shot to the server 
 		 * 
-		 * @param 	String	target
+		 * @param target
 		 */
 		
 		public void shootTarget(String target){
 			
 			characterMap.get(target).shot();
+			JOptionPane.showMessageDialog(null,"You've shot " + target);
 			try {
 				output.writeObject(characterMap.get(target));
 				output.flush();
@@ -659,7 +687,7 @@ public class GameClient implements Serializable{
 		/**
 		 * Sends a character to the server
 		 * 
-		 * @param	Chartacter	character
+		 * @param character
 		 */
 		
 		public void flushCharacter(client.Character character){
@@ -674,8 +702,8 @@ public class GameClient implements Serializable{
 		/**
 		 * Checks the direction the character wants to move an if its a valid move tells the server 
 		 * 
-		 * @param	Character	character
-		 * @param 	String	direction
+		 * @param character
+		 * @param direction
 		 */
 		
 		public void moveChar(client.Character character, String direction) {
@@ -756,7 +784,7 @@ public class GameClient implements Serializable{
 		/**
 		 * Tells the server to show the treasure
 		 * 
-		 * @param	boolean	status
+		 * @param status
 		 */
 		
 		public void showTreasure(boolean status){
@@ -774,7 +802,7 @@ public class GameClient implements Serializable{
 		/**
 		 * Tells "clientFrame" what it should change and reads data that has been modified 
 		 * 
-		 * @param	Character	character
+		 * @param character
 		 */
 
 		public void updateCharacter(client.Character character){
@@ -832,6 +860,7 @@ public class GameClient implements Serializable{
 				characterMap.get(characterName).givePieces(tempMapPieces);
 				if(characterMap.get(characterName).getPieces() == characterMap.size()){
 					showTreasure(true);
+					sendMessageAllMapPieces();
 				}
 			}
 			
@@ -849,14 +878,26 @@ public class GameClient implements Serializable{
 					}
 				}
 			}
-		}	
+		}
+
+		public void sendMessageAllMapPieces() {
+			AllMapPiecesMessage ampm = new AllMapPiecesMessage(username);
+
+			try {
+				output.writeObject(ampm);
+				output.flush();
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
-	
+
 	/**
-	 * Checks the tiles to the specified side of your character for available path 
-	 * 
-	 * @param 	String dir
-	 * @return	boolean
+	 *
+	 * @param me
+	 * @param dir
+	 * @return ret
 	 */
 
 	public boolean checkMove(client.Character me, String dir) {
@@ -924,7 +965,7 @@ public class GameClient implements Serializable{
 
 	/**
 	 * Creates a map 
-	 * @return	Tile[][]	map array
+	 * @return map array
 	 */
 	
 	public Tile[][] createMap(){
@@ -1170,7 +1211,7 @@ public class GameClient implements Serializable{
 	/**
 	 * Returns a ArrayList with the characters in view
 	 * 
-	 * @param Character
+	 * @param character
 	 * @return ArrayList<client.Character>
 	 */
 	
@@ -1275,5 +1316,6 @@ public class GameClient implements Serializable{
 		}else{
 			return charArray;
 		}
-	}		
+	}
+
 }

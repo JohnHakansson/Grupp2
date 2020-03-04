@@ -14,22 +14,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 import client.GameClient;
+import messages.ClientDisconnectMessage;
 
 
 /**
@@ -39,7 +27,7 @@ import client.GameClient;
  *
  */
 
-public class ClientFrame extends JPanel implements ActionListener, ViewerListener,KeyListener, MouseListener {
+public class ClientFrame extends JPanel implements ActionListener, ViewerListener, KeyListener, MouseListener {
 
 	private JPanel panel = new JPanel();
 	private JPanel leftPanel = new JPanel(new BorderLayout());
@@ -53,7 +41,8 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	private JPanel inputMiddlePanel = new JPanel(new GridBagLayout());
 	private JPanel charChoices = new JPanel();
 	private JPanel targetChoices = new JPanel();
-	
+	private JPanel connectHowToPlay = new JPanel(new GridLayout(1,2));
+
 	private JLayeredPane mapPane = new JLayeredPane();
 	private JLabel mapLabel = new JLabel();
 	
@@ -103,6 +92,7 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	private JLabel hookTargetBtn = new JLabel(new ImageIcon("images/Hook.png"));
 	
 	private JButton chooseChar = new JButton("Connect");
+	private JButton howToPlay = new JButton("How to play");
 	private JButton shootTarget = new JButton("shoot");
 
 	private DefaultListModel model = new DefaultListModel();
@@ -122,7 +112,7 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	private JTextField username = new JTextField("");
 	private JTextArea character = new JTextArea("");
 
-	private JButton bConnect = new JButton("Choose caracter");
+	private JButton bConnect = new JButton("Choose character");
 	private JButton bDisconnect = new JButton("Disconnect");
 	private JButton bClose = new JButton("Close");
 
@@ -148,7 +138,7 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	/**
 	 * Constructor that sets up the visual for the client
 	 * 
-	 * @param 	GameClient	client
+	 * @param client
 	 */
 
 	public ClientFrame(GameClient client) {
@@ -342,12 +332,13 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 		
 		chooseCharFrame.pack();
 		chooseTarget.pack();
+
 	}
-	
+
 	/**
 	 * Displays the name of the winner
 	 * 
-	 * @param	String	winner
+	 * @param	winner
 	 */
 	
 	public void showVictory(String winner){
@@ -366,8 +357,8 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	/**
 	 * Change out the icon of a character to its sleeping form or back to normal
 	 * 
-	 * @param	String	name
-	 * @param	boolean sleeping
+	 * @param		name
+	 * @param	 sleeping
 	 */
 	
 	public void setIconSleep(String name, boolean sleeping){
@@ -442,7 +433,7 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	/**
 	 * Change out the icon of a character to its drowning form
 	 * 
-	 * @param	String	name
+	 * @param name
 	 */
 	
 	public void setWaterIcon(String name){
@@ -481,18 +472,51 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	/**
 	 * Adds a name to the "connectedUsers" list
 	 * 
-	 * @param	String	name
+	 * @param name
 	 */
 	
 	public void addConnectedUser(String name){
 		model.addElement(name);
 	}
-	
-	/**
-	 * Method to enable buttons
-	 * 
-	 * @param 	boolean		enableButtons
-	 */
+
+	public void removeConnectedUser(ClientDisconnectMessage cdm) {
+		model.removeElement(cdm.getUsername());
+
+		removeCharacterFromMap(cdm.getCharacter().getName());
+	}
+
+	public void removeCharacterFromMap(String name) {
+
+		switch (name) {
+			case "Svullo":
+				mapPane.remove(svullo);
+				mapPane.repaint();
+				break;
+			case "TjoPang":
+				mapPane.remove(tjoPang);
+				mapPane.repaint();
+				break;
+			case "TheRat":
+				mapPane.remove(theRat);
+				mapPane.repaint();
+				break;
+			case "Hannibal":
+				mapPane.remove(hannibal);
+				mapPane.repaint();
+				break;
+			case "Markisen":
+				mapPane.remove(markisen);
+				mapPane.repaint();
+				break;
+			case "Hook":
+				mapPane.remove(hook);
+				mapPane.repaint();
+				break;
+			default:
+				break;
+		}
+
+	}
 
 	public void updateViewer(ExtendedJLabel theLabel) {
 		theLabel.setBackground(Color.RED);
@@ -501,8 +525,8 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	/**
 	 * Method to enable buttons
 	 * 
-	 * @param enableButtons
-	 *            boolean
+	 * @param
+	 *
 	 */
 	public void updateViewer() {
 		enableButtons("update");
@@ -579,8 +603,8 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	/**
 	 * Marks which character you are able to target
 	 * 
-	 * @param	String	character
-	 * @param	Srring	username
+	 * @param character
+	 * @param username
 	 */
 	
 	public void setAvailableTarget(String character, String username){
@@ -629,7 +653,7 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	/**
 	 * Method to enable or disable specific buttons
 	 * 
-	 * @param 	String		buttons
+	 * @param buttons
 	 */
 	
 	public void enableButtons(String buttons) {
@@ -755,11 +779,11 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 			System.out.println("ClientFrame: Down");
 		}
 		if (e.getSource() == chooseChar){
-			
+
 			if(!character.getText().equals("")){
 				client.setCharacter(character.getText());
 				chooseCharFrame.setVisible(false);
-			}	
+			}
 		}
 		if (e.getSource() == shootTarget) {
 			if (!target.equals("")) {
@@ -1029,18 +1053,18 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	@Override
 	public void chooseCharFrame() {
 		chooseCharFrame.setVisible(true);
-		
+
 	}
 	
 	/**
 	 * Sets which characters is available
 	 * 
-	 * @param	boolean	svullo
-	 * @param	boolean	tjoPang
-	 * @param	boolean	theRat
-	 * @param	boolean	markisen
-	 * @param	boolean	hannibal
-	 * @param	boolean	hook
+	 * @param svullo
+	 * @param tjoPang
+	 * @param theRat
+	 * @param markisen
+	 * @param hannibal
+	 * @param hook
 	 */
 
 	@Override

@@ -1,5 +1,6 @@
 package client;
 
+import javax.swing.*;
 import java.io.Serializable;
 
 /**
@@ -21,9 +22,9 @@ public class Character implements Serializable{
 	/**
 	 * Constructor fills up basic information to the character
 	 * 
-	 * @param 	String	name
-	 * @param 	int		row
-	 * @param 	int		col
+	 * @param name
+	 * @param row
+	 * @param col
 	 */
 	
 	public Character(String name, int row, int col){
@@ -77,6 +78,7 @@ public class Character implements Serializable{
 	 */
 	
 	public void shot(){
+		JOptionPane.showMessageDialog(null,"You've been shot!");
 		sleeping = 4;
 	}
 	
@@ -131,7 +133,7 @@ public class Character implements Serializable{
 	
 	/**
 	 * Gives the character the given number of map pieces
-	 * @param	int	pieces
+	 * @param pieces
 	 */
 	
 	public void givePieces(int pieces){
@@ -151,7 +153,7 @@ public class Character implements Serializable{
 	/**
 	 * Sets the map pieces to a given number
 	 * 
-	 * @param 	int	pieces
+	 * @param pieces
 	 */
 	
 	public void setPieces(int pieces){
@@ -160,8 +162,8 @@ public class Character implements Serializable{
 	
 	/**
 	 * Sets the position of the character
-	 * @param int	row
-	 * @param int	column
+	 * @param row
+	 * @param col
 	 */
 	
 	public void setPos(int row, int col){

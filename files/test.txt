@@ -1,0 +1,12 @@
+SPELINSTRUKTIONER
+
+1. För att skapa ett spel som andra kan ansluta sig till, tryck på host.
+Ip-adressen för att ansluta sig till spelservern står i server-rutan. När alla spelare är anslutna klicka på starta spel.
+Det behövs minst 2 spelare för att kunna starta spelet.
+
+2. Vid spelstart ska alla spelare kunna se allas karaktärer på olika startpositioner på kartan. 
+Spelet är turordningsbaserat - endast en spelare spelar åt gången medan resterande får vänta till sin tur.
+Spelarens steg är randomiserade från ett till sex steg till en giltig ruta.
+I spelfönstrets vänstra sidopanel kan spelare se följande; hur många steg spelaren ska ta, hur många kartbitar man har och vem som har skatten. 
+
+3. För att vinna spelet ska du röra dig till motståndarna, döda dem, och ta kartbitarna.
