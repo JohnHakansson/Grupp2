@@ -61,7 +61,7 @@ public class ServerFrame extends JPanel implements ActionListener{
 						+"utöver spelvärden (du) vara ansluten.\n"
 						+"Klicka sedan på 'Starta spelomgång'.\n"
 						+"-----------------------------------------------------------------------------------\n"
-						+"IP to conect to: " + inet.getHostAddress() + "\n"
+						+"IP att ansluta till: " + inet.getHostAddress() + "\n"
 						+"-----------------------------------------------------------------------------------\n");
 
 			} catch (UnknownHostException e) {
@@ -79,7 +79,7 @@ public class ServerFrame extends JPanel implements ActionListener{
 
 		
 		JScrollPane listUsersSP = new JScrollPane(listUsers);
-		listUsersSP.setBorder(BorderFactory.createTitledBorder("Connected Users:"));
+		listUsersSP.setBorder(BorderFactory.createTitledBorder("Anslutna användare:"));
 		listUsersSP.setPreferredSize(new Dimension(180, 300));
 		centerPanel.add(listUsersSP, BorderLayout.SOUTH);
 		

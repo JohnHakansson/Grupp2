@@ -91,9 +91,9 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	private JLabel markisenTargetBtn = new JLabel(new ImageIcon("images/Markisen.png"));
 	private JLabel hookTargetBtn = new JLabel(new ImageIcon("images/Hook.png"));
 	
-	private JButton chooseChar = new JButton("Connect");
-	private JButton howToPlay = new JButton("How to play");
-	private JButton shootTarget = new JButton("shoot");
+	private JButton chooseChar = new JButton("Anslut");
+	private JButton howToPlay = new JButton("Instruktioner");
+	private JButton shootTarget = new JButton("Skjut");
 
 	private DefaultListModel model = new DefaultListModel();
 	private JList listUsers = new JList(model);
@@ -112,22 +112,22 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	private JTextField username = new JTextField("");
 	private JTextArea character = new JTextArea("");
 
-	private JButton bConnect = new JButton("Choose character");
-	private JButton bDisconnect = new JButton("Disconnect");
-	private JButton bClose = new JButton("Close");
+	private JButton bConnect = new JButton("Välj karaktär");
+	private JButton bDisconnect = new JButton("Avsluta");
+	private JButton bClose = new JButton("Stäng av");
 
 	private JButton bLeft = new JButton("<<");
 	private JButton bRight = new JButton(">>");
 	private JButton bUp = new JButton("^");
 	private JButton bDown = new JButton("v");
-	private JButton bMove = new JButton("Move (Q)");
-	private JButton bShoot = new JButton("Shoot (E)");
-	private JButton bEndTurn = new JButton("End turn (R)");
-	private JButton bJump = new JButton("Jump (W)");
+	private JButton bMove = new JButton("Flytta (Q)");
+	private JButton bShoot = new JButton("Skjut (E)");
+	private JButton bEndTurn = new JButton("Avsluta tur (R)");
+	private JButton bJump = new JButton("Hoppa (W)");
 
-	private JFrame frame = new JFrame("Client");
-	private JFrame chooseCharFrame = new JFrame("Choose character");
-	private JFrame chooseTarget = new JFrame("Choose target");
+	private JFrame frame = new JFrame("Klient");
+	private JFrame chooseCharFrame = new JFrame("Välj karaktär");
+	private JFrame chooseTarget = new JFrame("Välj mål");
 
 	private ExtendedJLabel[][] boardArray = new ExtendedJLabel[41][47];
 
@@ -265,15 +265,15 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 		panel.add(rightPanel, BorderLayout.EAST);
 
 		JScrollPane listUsersSP = new JScrollPane(listUsers);
-		listUsersSP.setBorder(BorderFactory.createTitledBorder("Connected Users:"));
+		listUsersSP.setBorder(BorderFactory.createTitledBorder("Anslutna användare:"));
 		listUsersSP.setPreferredSize(new Dimension(180, 300));
 		leftPanel.add(listUsersSP, BorderLayout.SOUTH);
 
 		serverIp.setBorder(BorderFactory.createTitledBorder("Server IP"));
 		serverIp.setPreferredSize(new Dimension(180, 45));
 		serverPort.setBorder(BorderFactory.createTitledBorder("Server Port"));
-		username.setBorder(BorderFactory.createTitledBorder("Username"));
-		character.setBorder(BorderFactory.createTitledBorder("Character"));
+		username.setBorder(BorderFactory.createTitledBorder("Användarnamn"));
+		character.setBorder(BorderFactory.createTitledBorder("Karaktär"));
 		character.setEditable(false);
 		infoArea.setEditable(false);
 		infoArea.setBorder(BorderFactory.createTitledBorder("Info ruta"));
