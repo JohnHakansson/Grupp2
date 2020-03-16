@@ -131,6 +131,7 @@ public class ServerFrame extends JPanel implements ActionListener{
 			//Anropa start metoden i GameClient
 			server.startGame();
 			bStartGame.setEnabled(false);
+			frame.setVisible(false);
 		}
 	}
 }
