@@ -124,6 +124,7 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 	private JButton bShoot = new JButton("Skjut (E)");
 	private JButton bEndTurn = new JButton("Avsluta tur (R)");
 	private JButton bJump = new JButton("Hoppa (W)");
+	private JButton howToPlay2 = new JButton("Instruktioner");
 
 	private JFrame frame = new JFrame("Klient");
 	private JFrame chooseCharFrame = new JFrame("Välj karaktär");
@@ -298,6 +299,7 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 		inputMiddlePanel.add(bUp);
 		inputMiddlePanel.add(bDown);
 		inputMiddlePanel.add(bRight);
+		inputMiddlePanel.add(howToPlay2);
 
 		inputRightPanel.add(bDisconnect);
 		inputRightPanel.add(bClose);
@@ -313,6 +315,7 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 		bRight.addActionListener(this);
 		bEndTurn.addActionListener(this);
 		bJump.addActionListener(this);
+		howToPlay2.addActionListener(this);
 
 		bMove.setEnabled(false);
 		bShoot.setEnabled(false);
@@ -740,6 +743,9 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 			frame.requestFocus();
 			enableButtons("move");
 			client.throwDice();
+		}
+		if(e.getSource() == howToPlay2){
+			JOptionPane.showMessageDialog(null, "Instruktioner");
 		}
 		if(e.getSource() == bJump) {
 			client.jump();
