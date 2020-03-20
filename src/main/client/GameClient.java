@@ -435,14 +435,6 @@ public class GameClient implements Serializable{
 		}
 		
 		/**
-		 * An empty method
-		 */
-			
-		public Connection() {
-			
-		}
-		
-		/**
 		 * Executes the "Connection" class thread
 		 */
 
@@ -496,7 +488,7 @@ public class GameClient implements Serializable{
 
 						String objectString = (String)object;
 
-						if(objectString.contains("have been shot by")) {
+						if(objectString.contains("har skjutit")) {
 
 							JOptionPane.showMessageDialog(null, objectString);
 						}
@@ -605,7 +597,7 @@ public class GameClient implements Serializable{
 							}
 						}else if(object.equals("steal pieces")){
 							characterMap.get(input.readObject()).setPieces(0);
-						}else{
+						}else if(!object.equals("har skjutit")){
 							for(ViewerListener listener: listeners){
 								System.out.println("Client: mottagit ny user/users uppdaterar \"ConnectedUserList\"");
 								listener.removeConnectedUsers();
@@ -635,7 +627,7 @@ public class GameClient implements Serializable{
 
 						AllMapPiecesMessage ampm = (AllMapPiecesMessage)object;
 
-						JOptionPane.showMessageDialog(null, ampm.getUsername() + " now has all the map pieces");
+						JOptionPane.showMessageDialog(null, ampm.getUsername() + " har alla kartbitarna!");
 
 					}
 
@@ -687,17 +679,6 @@ public class GameClient implements Serializable{
 			YouHaveBeenShotMessage shotMessage = new YouHaveBeenShotMessage(target, username);
 			try {
 				output.writeObject(characterMap.get(target));
-				output.flush();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			sendShootMessage(shotMessage);
-		}
-
-		public void sendShootMessage(YouHaveBeenShotMessage shotMessage) {
-
-			try {
 				output.writeObject(shotMessage);
 				output.flush();
 			} catch (IOException e) {
