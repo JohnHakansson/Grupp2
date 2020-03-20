@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import main.gui.ViewerListener;
 import main.messages.AllMapPiecesMessage;
 import main.messages.ClientDisconnectMessage;
+import main.messages.YouHaveBeenShotMessage;
 
 /**
  * 
@@ -492,6 +493,8 @@ public class GameClient implements Serializable{
 						updateCharacter(character);
 					}
 					else if (object instanceof String){
+
+						String objectString = (String)object;
 						
 						if(object.equals("Enable buttons")){
 							boolean enableButtons = input.readBoolean();
@@ -609,6 +612,11 @@ public class GameClient implements Serializable{
 								object = input.readObject();
 							}
 						}
+
+						if(objectString.contains("have been shot by")) {
+
+							JOptionPane.showMessageDialog(null, objectString);
+						}
 					}
 
 					else if(object instanceof ClientDisconnectMessage) {
@@ -676,8 +684,21 @@ public class GameClient implements Serializable{
 			JOptionPane.showMessageDialog(null,"You've been shot!");
 			characterMap.get(target).shot();
 			JOptionPane.showMessageDialog(null,"You've shot " + target);
+			YouHaveBeenShotMessage shotMessage = new YouHaveBeenShotMessage(target, username);
 			try {
 				output.writeObject(characterMap.get(target));
+				output.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			sendShootMessage(shotMessage);
+		}
+
+		public void sendShootMessage(YouHaveBeenShotMessage shotMessage) {
+
+			try {
+				output.writeObject(shotMessage);
 				output.flush();
 			} catch (IOException e) {
 				e.printStackTrace();
