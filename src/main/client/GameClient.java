@@ -495,6 +495,11 @@ public class GameClient implements Serializable{
 					else if (object instanceof String){
 
 						String objectString = (String)object;
+
+						if(objectString.contains("have been shot by")) {
+
+							JOptionPane.showMessageDialog(null, objectString);
+						}
 						
 						if(object.equals("Enable buttons")){
 							boolean enableButtons = input.readBoolean();
@@ -613,10 +618,7 @@ public class GameClient implements Serializable{
 							}
 						}
 
-						if(objectString.contains("have been shot by")) {
 
-							JOptionPane.showMessageDialog(null, objectString);
-						}
 					}
 
 					else if(object instanceof ClientDisconnectMessage) {
@@ -681,9 +683,7 @@ public class GameClient implements Serializable{
 		 */
 		
 		public void shootTarget(String target){
-			JOptionPane.showMessageDialog(null,"You've been shot!");
 			characterMap.get(target).shot();
-			JOptionPane.showMessageDialog(null,"You've shot " + target);
 			YouHaveBeenShotMessage shotMessage = new YouHaveBeenShotMessage(target, username);
 			try {
 				output.writeObject(characterMap.get(target));

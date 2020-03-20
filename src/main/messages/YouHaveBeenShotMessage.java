@@ -1,6 +1,8 @@
 package main.messages;
 
-public class YouHaveBeenShotMessage {
+import java.io.Serializable;
+
+public class YouHaveBeenShotMessage implements Serializable {
     private String target;
     private String shooter;
 

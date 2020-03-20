@@ -293,7 +293,7 @@ public class GameServer implements Runnable{
 
 						YouHaveBeenShotMessage shotMessage = (YouHaveBeenShotMessage)object;
 
-						String message = shotMessage.getTarget() + " have been shot by " + characterMap.get(shotMessage.getShooter());
+						String message = shotMessage.getTarget() + " have been shot by " + shotMessage.getShooter();
 
 						for(String s : clientMap.keySet()) {
 
@@ -305,7 +305,6 @@ public class GameServer implements Runnable{
 					
 				}catch (IOException | ClassNotFoundException e) {
 					Thread.currentThread().interrupt();
-					closeSocket();
 					e.printStackTrace();
 				}
 			}
