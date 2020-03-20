@@ -80,6 +80,7 @@ public class Character implements Serializable{
 	public void shot(){
 
 		sleeping = 4;
+		JOptionPane.showMessageDialog(null, null + " blev skjuten och kommer sova i 4 turer");
 	}
 	
 	/**

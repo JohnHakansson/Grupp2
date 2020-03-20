@@ -5,14 +5,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
+import main.client.Character;
 import main.gui.ServerFrame;
 import main.gui.ServerLogger;
 import main.messages.AllMapPiecesMessage;
 import main.messages.ClientDisconnectMessage;
+import main.messages.YouHaveBeenShotMessage;
 
 /**
  * 
@@ -288,10 +288,23 @@ public class GameServer implements Runnable{
 							clientMap.get(s).output.flush();
 						}
 					}
+
+					else if(object instanceof YouHaveBeenShotMessage) {
+
+						YouHaveBeenShotMessage shotMessage = (YouHaveBeenShotMessage)object;
+
+						String message = shotMessage.getTarget() + " har skjutit " + shotMessage.getShooter();
+
+						for(String s : clientMap.keySet()) {
+
+							clientMap.get(s).output.writeObject(message);
+							clientMap.get(s).output.flush();
+						}
+
+					}
 					
 				}catch (IOException | ClassNotFoundException e) {
 					Thread.currentThread().interrupt();
-					closeSocket();
 					e.printStackTrace();
 				}
 			}

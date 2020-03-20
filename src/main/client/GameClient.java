@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import main.gui.ViewerListener;
 import main.messages.AllMapPiecesMessage;
 import main.messages.ClientDisconnectMessage;
+import main.messages.YouHaveBeenShotMessage;
 
 /**
  * 
@@ -434,14 +435,6 @@ public class GameClient implements Serializable{
 		}
 		
 		/**
-		 * An empty method
-		 */
-			
-		public Connection() {
-			
-		}
-		
-		/**
 		 * Executes the "Connection" class thread
 		 */
 
@@ -492,6 +485,13 @@ public class GameClient implements Serializable{
 						updateCharacter(character);
 					}
 					else if (object instanceof String){
+
+						String objectString = (String)object;
+
+						if(objectString.contains("har skjutit")) {
+
+							JOptionPane.showMessageDialog(null, objectString);
+						}
 						
 						if(object.equals("Enable buttons")){
 							boolean enableButtons = input.readBoolean();
@@ -597,7 +597,7 @@ public class GameClient implements Serializable{
 							}
 						}else if(object.equals("steal pieces")){
 							characterMap.get(input.readObject()).setPieces(0);
-						}else{
+						}else if(!object.equals("har skjutit")){
 							for(ViewerListener listener: listeners){
 								System.out.println("Client: mottagit ny user/users uppdaterar \"ConnectedUserList\"");
 								listener.removeConnectedUsers();
@@ -609,6 +609,8 @@ public class GameClient implements Serializable{
 								object = input.readObject();
 							}
 						}
+
+
 					}
 
 					else if(object instanceof ClientDisconnectMessage) {
@@ -625,7 +627,7 @@ public class GameClient implements Serializable{
 
 						AllMapPiecesMessage ampm = (AllMapPiecesMessage)object;
 
-						JOptionPane.showMessageDialog(null, ampm.getUsername() + " now has all the map pieces");
+						JOptionPane.showMessageDialog(null, ampm.getUsername() + " har alla kartbitarna!");
 
 					}
 
@@ -673,11 +675,11 @@ public class GameClient implements Serializable{
 		 */
 		
 		public void shootTarget(String target){
-			JOptionPane.showMessageDialog(null,"You've been shot!");
 			characterMap.get(target).shot();
-			JOptionPane.showMessageDialog(null,"You've shot " + target);
+			YouHaveBeenShotMessage shotMessage = new YouHaveBeenShotMessage(target, username);
 			try {
 				output.writeObject(characterMap.get(target));
+				output.writeObject(shotMessage);
 				output.flush();
 			} catch (IOException e) {
 				e.printStackTrace();
