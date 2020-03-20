@@ -1,7 +1,7 @@
 SPELINSTRUKTIONER
 
 1. För att skapa ett spel som andra kan ansluta sig till, tryck på host.
-Ip-adressen för att ansluta sig till spelservern står i server-rutan. När alla spelare är anslutna klicka på starta spel.
+Ip-adressen för att ansluta sig till spelservern står i main.server-rutan. När alla spelare är anslutna klicka på starta spel.
 Det behövs minst 2 spelare för att kunna starta spelet.
 
 2. Vid spelstart ska alla spelare kunna se allas karaktärer på olika startpositioner på kartan. 
