@@ -597,16 +597,19 @@ public class GameClient implements Serializable{
 							}
 						}else if(object.equals("steal pieces")){
 							characterMap.get(input.readObject()).setPieces(0);
-						}else if(!object.equals("har skjutit")){
+						}else if(!objectString.contains("har skjutit")){
 							for(ViewerListener listener: listeners){
 								System.out.println("Client: mottagit ny user/users uppdaterar \"ConnectedUserList\"");
 								listener.removeConnectedUsers();
 							}
 							while(object != null){
-								for(ViewerListener listener: listeners){
-									listener.addConnectedUser((String) object);
+								if(object instanceof String) {
+									for(ViewerListener listener: listeners){
+										listener.addConnectedUser((String) object);
+									}
+									object = input.readObject();
 								}
-								object = input.readObject();
+
 							}
 						}
 
