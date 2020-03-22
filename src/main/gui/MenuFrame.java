@@ -30,10 +30,10 @@ import main.client.GameClient;
 
 public class MenuFrame implements ActionListener{
 	private	IconPanel iconPanel;
-	private	JButton host = new JButton("Host");
-	private	JButton join = new JButton("Join");
-	private	JButton quit = new JButton("Quit");
-	private JButton btnHowToPlay = new JButton("How to play");
+	private	JButton host = new JButton("Skapa rum");
+	private	JButton join = new JButton("Gå med i spel");
+	private	JButton quit = new JButton("Avsluta");
+	private JButton btnHowToPlay = new JButton("Instruktioner");
 
 	private GridBagLayout layout = new GridBagLayout();	
 	private	JPanel panel = new JPanel(new GridLayout(5,1,10,10));
