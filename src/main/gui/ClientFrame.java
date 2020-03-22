@@ -745,7 +745,12 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 			client.throwDice();
 		}
 		if(e.getSource() == howToPlay2){
-			JOptionPane.showMessageDialog(null, "Instruktioner");
+			JOptionPane.showMessageDialog(null, "Vid spelstart ska alla spelare kunna se allas karaktärer på olika startpositioner på kartan. \n" +
+					"Spelet är turordningsbaserat - endast en spelare spelar åt gången medan resterande får vänta till sin tur.\n" +
+					"Spelarens steg är randomiserade från ett till sex steg till en giltig ruta.\n" +
+					"I spelfönstrets vänstra sidopanel kan spelare se följande; hur många steg spelaren ska ta, hur många kartbitar man har och vem som har skatten. \n" +
+					"\n" +
+					"För att vinna spelet ska du röra dig till motståndarna, döda dem, och ta kartbitarna.");
 		}
 		if(e.getSource() == bJump) {
 			client.jump();
