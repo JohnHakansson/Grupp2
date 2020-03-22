@@ -152,6 +152,7 @@ public class ClientFrame extends JPanel implements ActionListener, ViewerListene
 		frame.setVisible(true);
 		frame.setLayout(new BorderLayout());
 		flowPanel.setLayout(new FlowLayout());
+		frame.setResizable(false);
 		
 		chooseCharFrame.setVisible(false);
 		chooseCharFrame.setLayout(new BorderLayout());
