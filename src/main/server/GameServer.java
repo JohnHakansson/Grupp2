@@ -293,7 +293,7 @@ public class GameServer implements Runnable{
 
 						YouHaveBeenShotMessage shotMessage = (YouHaveBeenShotMessage)object;
 
-						String message = shotMessage.getTarget() + " har skjutit " + shotMessage.getShooter() + ".\n" +
+						String message = shotMessage.getShooter() + " har skjutit " + shotMessage.getTarget() + ".\n" +
 																	shotMessage.getTarget() + " kommer nu att sova i 4 turer.";
 
 						for(String s : clientMap.keySet()) {
